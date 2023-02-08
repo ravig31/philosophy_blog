@@ -14,18 +14,17 @@ router.get('/edit/:id', async (req, res) => {
 })
 
 router.get("/:slug", async (req, res) => {
-    const article = await Article.findOne( {slug : req.params.slug})
-    if (article == null) res.redirect('/')
-    res.render('articles/show', {article: article})
-})
+    const article = await Article.findOne({slug : req.params.slug});
+    if (article == null) res.redirect('/');
+    res.render('articles/show', {article: article});
+});
 
-router.put('/:id', async (req, res) => {
+
+router.put('/:id', async (req, res, next) => {
     console.log('editted')
-    const article = await Article.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    })
-    res.redirect(`/articles/${article.slug}`)})
+    req.article = await Article.findById(req.params.id)
+    next()
+}, saveAndRedirect('edit'))
 
   
 router.post('/', async (req, res, next) => {

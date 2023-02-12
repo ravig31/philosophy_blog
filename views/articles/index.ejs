@@ -11,10 +11,13 @@
     <div class="container">
         <h1 class="mt-4 mb-4">Blog Articles</h1>
         <div class="d-flex flex-row justify-content-between">
-            <a href="/articles/new" class="btn btn-success">New Article</a>
+            <div>
+                <a href="/articles/new" class="btn btn-success">New Article</a>
+                <a href="/articles/share" class="btn btn-secondary">Share Article</a>
+            </div>
             <div class="user-auth">
-                <a href="/articles/login" class="btn btn-outline-dark ms-1">Login</a>
-                <a href="/articles/signup" class="btn btn-dark ms-1">Sign Up</a>
+                <a href="../auth/login" class="btn btn-outline-dark ms-1">Login</a>
+                <a href="../auth/signup" class="btn btn-dark ms-1">Sign Up</a>
             </div>
         </div>
         <% articles.forEach(article => { %>

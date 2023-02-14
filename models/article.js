@@ -17,6 +17,12 @@ const articleSchema = new mongoose.Schema({
         type: String,
         required: true, 
     },
+
+    origURL: {
+        type: String,
+        required: false,
+    },
+
     createdAt: {
         type: Date,
         default: Date.now
@@ -30,6 +36,7 @@ const articleSchema = new mongoose.Schema({
         type: String,
         required: true
     }
+    
 })
 
 

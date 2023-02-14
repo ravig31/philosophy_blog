@@ -43,10 +43,7 @@ const login = (req, res, next) => {
                 }
                 if(result){
                     let token = jwt.sign({name: user.name}, 'verySecretValue', {expiresIn: '1h'})
-                    res.json({
-                        message: "login success",
-                        token
-                    })
+                    res.redirect('/')
                 }else{
                     res.json({
                         message: "password not match"
@@ -60,6 +57,7 @@ const login = (req, res, next) => {
         }
     })
 }
+
 
 module.exports = {
     register, login

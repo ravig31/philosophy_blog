@@ -29,10 +29,10 @@ const register = (req, res, next) => {
     })
 }
 
-const login = (req, res, next) => {
+const login = (req, res, next, callback) => {
     var username = req.body.username
     var password = req.body.password
-
+  
     User.findOne({email: username}).then(user =>{
         if(user){
             bcrypt.compare(password, user.password, function(err, result){
@@ -43,7 +43,9 @@ const login = (req, res, next) => {
                 }
                 if(result){
                     let token = jwt.sign({name: user.name}, 'verySecretValue', {expiresIn: '1h'})
-                    res.redirect('/')
+                    res.json({
+                        token: token
+                    })
                 }else{
                     res.json({
                         message: "password not match"
@@ -56,9 +58,9 @@ const login = (req, res, next) => {
             })
         }
     })
-}
-
-
-module.exports = {
-    register, login
-}
+  }
+  
+  module.exports = {
+      register, login
+  };
+  

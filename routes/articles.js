@@ -3,14 +3,16 @@ const { default: mongoose } = require('mongoose')
 const Article = require('./../models/article')
 const router = express.Router()
 const api = require('../api/medium-api')
+const authenticateToken = require('../middleware/authenticate')
 
 
 
-router.get('/new', requireLogin,(req, res) => {
-    res.render('articles/new', {article: new Article() })
+router.get('/new', (req, res) => {
+    res.render('articles/new', { article: new Article() })
 })
 
-router.get('/share', requireLogin,(req, res) => {
+
+router.get('/share',(req, res) => {
     res.render('articles/share')
 })
 
@@ -65,15 +67,6 @@ router.delete('/:id', async (req, res) => {
     await Article.findByIdAndDelete(req.params.id)
     res.redirect('/')
 })
-
-
-function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
-    if (token == null) return res.sendStatus(401)
-
-    JsonWebTokenError.verify(token, 'verySecretValue')
-}
 
 
 function saveAndRedirect(path) {

@@ -1,11 +1,11 @@
 const express = require('express')
 const { default: mongoose } = require('mongoose')
 const Article = require('./../models/article')
+const User = require('../models/user')
 const router = express.Router()
 const api = require('../api/medium-api')
 const authenticateToken = require('../middleware/authenticate')
 const { auth, requiresAuth } = require('express-openid-connect');
-
 
 
 router.get('/new', (req, res) => {
@@ -13,7 +13,7 @@ router.get('/new', (req, res) => {
 })
 
 
-router.get('/share',(req, res) => {
+router.get('/share', (req, res) => {
     res.render('articles/share')
 })
 

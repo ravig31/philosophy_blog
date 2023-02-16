@@ -5,16 +5,24 @@ const methodOverride = require('method-override')
 
 const Article = require('./models/article')
 const articleRouter = require('./routes/articles')
-const authRouter = require('./routes/auth')
 
-const mongoose = require('mongoose')
 const { auth, requiresAuth } = require('express-openid-connect');
-const user = require('./models/user')
+const User = require('./models/user')
 
+const { MongoClient } = require('mongodb');
+const uri = 'mongodb+srv://ravig31:room14>@<cluster-address>/<database>?retryWrites=true&w=majority';
+const client = new MongoClient(uri);
 
-const DB_URL = "mongodb://127.0.0.1:27017/blogposts"
-mongoose.set('strictQuery', true);
-mongoose.connect(DB_URL);
+async function run() {
+  try {
+    await client.connect();
+    console.log("Connected successfully to server");
+  } finally {
+    await client.close();
+  }
+}
+
+run().catch(console.dir);
 
 const config = {
     authRequired: false,
@@ -42,6 +50,8 @@ app.get('/', async (req, res) => {
 
 })
 
+
+
 app.get('/auth/user', requiresAuth(), (req, res) => {
     res.send(JSON.stringify(req.oidc.user))
 })
@@ -49,5 +59,4 @@ app.get('/auth/user', requiresAuth(), (req, res) => {
 
 
 app.use("/articles", articleRouter)
-app.use("/auth", authRouter)
 app.listen(3000)

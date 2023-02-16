@@ -12,9 +12,5 @@ router.get('/signup', (req, res) => {
     res.render("auth/signup")
 })    
 
-router.post('/signup', authController.register)
-router.post('/login', authController.login)
-
-
 
 module.exports = router

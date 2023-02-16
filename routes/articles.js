@@ -4,6 +4,7 @@ const Article = require('./../models/article')
 const router = express.Router()
 const api = require('../api/medium-api')
 const authenticateToken = require('../middleware/authenticate')
+const { auth, requiresAuth } = require('express-openid-connect');
 
 
 

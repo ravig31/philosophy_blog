@@ -1,19 +1,19 @@
 const express = require('express')
 const { default: mongoose } = require('mongoose')
 const Article = require('./../models/article')
-const User = require('../models/user')
 const router = express.Router()
 const api = require('../api/medium-api')
-const authenticateToken = require('../middleware/authenticate')
 const { auth, requiresAuth } = require('express-openid-connect');
 
 
-router.get('/new', (req, res) => {
+
+router.get('/new', requiresAuth(), (req, res) => {
+    user = await 
     res.render('articles/new', { article: new Article() })
 })
 
 
-router.get('/share', (req, res) => {
+router.get('/share', requiresAuth(), (req, res) => {
     res.render('articles/share')
 })
 
@@ -24,10 +24,18 @@ router.get('/edit/:id', async (req, res) => {
 })
 
 router.get("/:slug", async (req, res) => {
-    const article = await Article.findOne({slug : req.params.slug});
-    if (article == null) res.redirect('/');
-    res.render('articles/show', {article: article});
-});
+    const article = await Article.findOne({ slug: req.params.slug });
+    let fromMedium = false;
+  
+    if (article == null) {
+      res.redirect('/');
+    } else {
+      if (article.hasOwnProperty('origURL') && article.origURL) {
+        fromMedium = true;
+      }
+      res.render('articles/show', { article, fromMedium });
+    }
+  });
 
 
 router.put('/:id', async (req, res, next) => {
@@ -48,11 +56,12 @@ router.post('/share', async (req, res, next) => {
     const ArticleID = mediumURLparts[mediumURLparts.length - 1];
     const articleData = await api.processArticleID(ArticleID);
 
+    
     let article = new Article()
     article.title = articleData.title
     article.description = articleData.description
     article.markdown = articleData.markdown
-    article.origURL = articleData.origURL
+    article.origURL = articleData.url
 
     try{
         article = await article.save()

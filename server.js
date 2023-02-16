@@ -7,22 +7,11 @@ const Article = require('./models/article')
 const articleRouter = require('./routes/articles')
 
 const { auth, requiresAuth } = require('express-openid-connect');
-const User = require('./models/user')
 
-const { MongoClient } = require('mongodb');
-const uri = 'mongodb+srv://ravig31:room14>@<cluster-address>/<database>?retryWrites=true&w=majority';
-const client = new MongoClient(uri);
-
-async function run() {
-  try {
-    await client.connect();
-    console.log("Connected successfully to server");
-  } finally {
-    await client.close();
-  }
-}
-
-run().catch(console.dir);
+const mongoose = require('mongoose')
+const DB_URL = "mongodb+srv://ravig31:room14@personal-project-cluste.tscxyk2.mongodb.net/blogposts"
+mongoose.set('strictQuery', true);
+mongoose.connect(DB_URL);
 
 const config = {
     authRequired: false,
@@ -49,7 +38,6 @@ app.get('/', async (req, res) => {
     res.render('articles/index', { articles: articles, isLoggedIn: isLoggedIn, userImgUrl: userImgUrl })
 
 })
-
 
 
 app.get('/auth/user', requiresAuth(), (req, res) => {

@@ -30,13 +30,13 @@ exports.processArticleID = async function(ArticleID) {
       const markdownLines = markdownResponse.data.markdown.split('\n');
       const processedMarkdown = markdownLines.slice(2).join('\n');
 
-    
+
 
     return {
       title: infoResponse.data.title,
       description: infoResponse.data.subtitle,
       markdown: processedMarkdown,
-      origURL: infoResponse.data.url
+      url: infoResponse.data.url
     }
 
   }catch (error) {

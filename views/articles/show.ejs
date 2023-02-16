@@ -17,12 +17,14 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="mb-1"><%= article.title%></h1>
+        <h1 class="mb-1"><%= article.title %></h1>
         <div class="d-flex text-muted mb-2 mt-2">
             <%= article.createdAt.toLocaleDateString() %>
-            <a href="<%= article.origURL %>" target="_blank">
-            <h6 class="ps-3 pb-1">Click Here for original article!</h6>
-            </a>
+            <% if (fromMedium) { %>
+                <a href="<%= article.origURL %>" target="_blank">
+                    <h6 class="ps-3 pb-1">Click Here for original article!</h6>
+                </a>
+            <% } %>
         </div>
         <a href="/" class="btn btn-secondary">All Articles</a>
         <a href="/articles/edit/<%= article.id %>" class="btn btn-info">Edit</a>

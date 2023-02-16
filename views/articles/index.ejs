@@ -41,17 +41,8 @@
                 <h1 class="mt-4 mb-4">Blog Articles</h1>
                 
                 <div>
-                    <% if (isLoggedIn) { %>
-                        <a href="/articles/new" class="btn btn-success" >New Article</a>
-                        <a href="/articles/share" class="btn btn-secondary">Share Article</a>
-                    <% } else { %>
-                        <span data-bs-toggle="tooltip" title="Please Login!">
-                            <a href="/articles/new" class="btn btn-success disabled">New Article</a>
-                        </span>
-                        <span data-bs-toggle="tooltip" title="Please Login!">
-                            <a href="/articles/share" class="btn btn-secondary disabled" >Share Article</a>
-                        </span>
-                    <% } %>
+                    <a href="/articles/new" class="btn btn-success" >New Article</a>
+                    <a href="/articles/share" class="btn btn-secondary">Share Article</a>
                 </div>
             </div>
                 <% if (isLoggedIn) { %>

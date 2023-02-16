@@ -8,7 +8,7 @@ const dompurify = createDomPurify(new JSDOM().window)
 const articleSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true, //always required
+        required: true, 
     },
     description: {
         type: String,
@@ -22,7 +22,7 @@ const articleSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
-
+    
     createdAt: {
         type: Date,
         default: Date.now

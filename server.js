@@ -9,7 +9,7 @@ const articleRouter = require('./routes/articles')
 const { auth, requiresAuth } = require('express-openid-connect');
 
 const mongoose = require('mongoose')
-const DB_URL = "mongodb+srv://ravig31:room14@personal-project-cluste.tscxyk2.mongodb.net/blogposts"
+const DB_URL = "mongodb+srv://ravig31:"+process.env.MONGODB_PASSWORD+"@personal-project-cluste.tscxyk2.mongodb.net/blogposts"
 mongoose.set('strictQuery', true);
 mongoose.connect(DB_URL);
 
@@ -33,7 +33,7 @@ app.set('view engine', 'ejs')
 
 
 app.get('/', async (req, res) => {
-    
+
     const isLoggedIn = req.oidc.isAuthenticated()
     isLoggedIn ? userImgUrl = req.oidc.user.picture : userImgUrl = null
 

@@ -53,7 +53,7 @@ router.post('/new', async (req, res, next) => {
     // add article to user DB
     updateUserArticles(userId, req.article.id)
     next()
-}, saveAndRedirect('new', userId))
+}, saveAndRedirect('new'))
 
 
 router.post('/share', async (req, res, next) => {
@@ -112,7 +112,6 @@ function updateUserArticles(userId, articleId){
 
 
 function saveAndRedirect(path, userId = null) {
-    console.log(userId)
     return async (req, res) => {
         let article = req.article
         article.title = req.body.title

@@ -18,6 +18,11 @@ const articleSchema = new mongoose.Schema({
         required: true, 
     },
 
+    author: {
+        type: String,
+        required: true,
+    },
+
     origURL: {
         type: String,
         required: false,
@@ -59,4 +64,4 @@ articleSchema.pre('validate', async function(next) {
     next()
 })
 
-module.exports = mongoose.model('Article', articleSchema)
+module.exports = mongoose.model('article', articleSchema)

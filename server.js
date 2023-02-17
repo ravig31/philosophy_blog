@@ -13,6 +13,9 @@ const DB_URL = "mongodb+srv://ravig31:room14@personal-project-cluste.tscxyk2.mon
 mongoose.set('strictQuery', true);
 mongoose.connect(DB_URL);
 
+
+
+
 const config = {
     authRequired: false,
     auth0Logout: true,
@@ -30,6 +33,7 @@ app.set('view engine', 'ejs')
 
 
 app.get('/', async (req, res) => {
+    
     const isLoggedIn = req.oidc.isAuthenticated()
     isLoggedIn ? userImgUrl = req.oidc.user.picture : userImgUrl = null
 

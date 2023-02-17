@@ -1,6 +1,7 @@
 const express = require('express')
 const { default: mongoose } = require('mongoose')
 const Article = require('./../models/article')
+const User = require('./../models/user')
 const router = express.Router()
 const api = require('../api/medium-api')
 const { auth, requiresAuth } = require('express-openid-connect');
@@ -8,7 +9,6 @@ const { auth, requiresAuth } = require('express-openid-connect');
 
 
 router.get('/new', requiresAuth(), (req, res) => {
-    user = await 
     res.render('articles/new', { article: new Article() })
 })
 
@@ -45,17 +45,21 @@ router.put('/:id', async (req, res, next) => {
 
   
 router.post('/new', async (req, res, next) => {
-    console.log('new post')
     req.article = new Article()
+
+    const sub = req.oidc.user.sub.split('|')
+    const userId = sub[sub.length - 1]
+
+    // add article to user DB
+    updateUserArticles(userId, req.article.id)
     next()
 }, saveAndRedirect('new'))
 
 
 router.post('/share', async (req, res, next) => {
     const mediumURLparts = (req.body.mediumurl).split('-');
-    const ArticleID = mediumURLparts[mediumURLparts.length - 1];
-    const articleData = await api.processArticleID(ArticleID);
-
+    const mediumId = mediumURLparts[mediumURLparts.length - 1];
+    const articleData = await api.processArticleID(mediumId);
     
     let article = new Article()
     article.title = articleData.title
@@ -69,17 +73,46 @@ router.post('/share', async (req, res, next) => {
     } catch (e){
         res.render(`articles/${path}`, {article: article})
     }
+
+    const sub = req.oidc.user.sub.split('|')
+    const userId = sub[sub.length - 1]
+
+    updateUserArticles(userId, article.id)
+
   });
   
 
 
 router.delete('/:id', async (req, res) => {
+    const sub = req.oidc.user.sub.split('|')
+    const userId = sub[sub.length - 1]
+
+    User.updateOne({ _id: userId }, { $pull: { articles: req.params.id} }, (err, result) => {
+        if (err) {
+          console.error('Error deleting article:', err);
+        } else {
+          console.log('Article deleted');
+        }
+      });
+
     await Article.findByIdAndDelete(req.params.id)
     res.redirect('/')
 })
 
 
+function updateUserArticles(userId, articleId){
+    User.updateOne({ _id: userId }, { $push: { articles: articleId } }, (err, result) => {
+    if (err) {
+        console.error('Error adding article:', err);
+    } else {
+        console.log('Article added');
+    }
+    });
+}
+
+
 function saveAndRedirect(path) {
+    console.log(userId)
     return async (req, res) => {
         let article = req.article
         article.title = req.body.title

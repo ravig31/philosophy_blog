@@ -6,7 +6,7 @@ exports.processArticleID = async function(ArticleID) {
     method: 'GET',
     url:  `https://medium2.p.rapidapi.com/article/${ArticleID}`,
     headers: {
-      'X-RapidAPI-Key': 'b83c966179msh44339ccc6092613p1a153bjsn48337fdc835a',
+      'X-RapidAPI-Key': process.env.API_KEY,
       'X-RapidAPI-Host': 'medium2.p.rapidapi.com'
     }
   };
@@ -15,7 +15,7 @@ exports.processArticleID = async function(ArticleID) {
     method: 'GET',
     url:  `https://medium2.p.rapidapi.com/article/${ArticleID}/markdown`,
     headers: {
-      'X-RapidAPI-Key': 'b83c966179msh44339ccc6092613p1a153bjsn48337fdc835a',
+      'X-RapidAPI-Key': process.env.API_KEY,
       'X-RapidAPI-Host': 'medium2.p.rapidapi.com'
     }
   };

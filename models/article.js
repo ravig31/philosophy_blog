@@ -40,6 +40,11 @@ const articleSchema = new mongoose.Schema({
     cleanedHtml: {
         type: String,
         required: true
+    },
+
+    comments: {
+        type: Array,
+        required: false
     }
     
 })

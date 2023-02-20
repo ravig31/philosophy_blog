@@ -31,10 +31,8 @@ app.use(express.urlencoded({ extended: false}))
 app.use(methodOverride('_method'))
 app.use(express.json())
 app.set('view engine', 'ejs')
-
-
 app.get('/', async (req, res) => {
-    
+        
     let sub;
     let userId;
     let userImgUrl;

@@ -46,8 +46,20 @@ router.get("/:slug", async (req, res) => {
 
       res.render('articles/show', { article : article, fromMedium: fromMedium, authorId: article.author[0],authorUsername: article.author[1], authorImg: article.author[2]});
     }
-  });
+});
 
+router.post('/:slug', async (req, res, next) => {
+
+    Article.updateOne({ _id: req.body.articleId}, { $push: { comments: [req.oidc.user.nickname, req.body.comment, new Date(Date.now())] } }, (err, result) => {
+        if (err) {
+            console.error('Error adding comment:', err);
+        } else {
+            console.log('Comment Added');
+        }
+        });
+
+    res.redirect(req.get('referer'))
+})
 
 router.put('/:id', async (req, res, next) => {
     req.article = await Article.findById(req.params.id)
@@ -107,6 +119,7 @@ router.post('/share', async (req, res, next) => {
     }
 
   });
+
   
 
 
@@ -139,7 +152,6 @@ router.delete('/:id', async (req, res) => {
     res.redirect('/')
 
 })
-
 
 
 function updateUserArticles(userId, articleId){

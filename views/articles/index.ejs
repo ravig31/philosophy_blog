@@ -10,7 +10,7 @@
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
      </script>
-    <title>Blog</title>
+    <title>The Prokopton's Cirlce</title>
     <style>
         .user-img{
             border-radius: 50%; 
@@ -21,6 +21,7 @@
         .login-btn{
             max-height: 36px;
             margin-top: 96px;
+            padding: 6px 12px;
         }
 
         .disabled:hover{
@@ -38,7 +39,7 @@
     <div class="container">
         <div class="d-flex justify-content-between">
             <div class="d-flex flex-column justify-content-between">
-                <h1 class="mt-4 mb-4">Blog Articles</h1>
+                <h1 class="mt-4 mb-4">The Prokopton's Cirlce</h1>
                 
                 <div>
                     <a href="/articles/new" class="btn btn-success" >New Article</a>
@@ -46,12 +47,12 @@
                 </div>
             </div>
                 <% if (isLoggedIn) { %>
-                    <a href="../auth/user" class="d-flex align-items-center pt-3">
+                    <a href="../auth/user/<%= userId %>" class="d-flex align-items-center pt-3">
                         <img class="user-img dropdown-toggle" src="<%= userImgUrl %>" alt="User Image">
                     </a>
                 <% } %>
                     <% if (!isLoggedIn) { %>
-                    <a href="/login" class="btn btn-dark ms-1 login-btn">Login/Signup</a>
+                    <a href="/login" class="btn btn-dark login-btn">Login/Signup</a>
                     <% } %>
         </div>
         <% articles.forEach(article => { %>
@@ -63,10 +64,12 @@
                     </div>
                     <div class="card-text mb-2"><%= article.description %></div>
                     <a href="articles/<%= article.slug %>" class="btn btn-primary">Read More</a>
-                    <a href="articles/edit/<%= article.id %>" class="btn btn-info">Edit</a>
-                    <form action="/articles/<%= article.id %>?_method=DELETE" method="POST" class="d-inline">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
+                    <% if (article.isOwnedByCurrentUser) { %>
+                        <a href="articles/edit/<%= article.id %>" class="btn btn-info">Edit</a>
+                        <form action="/articles/<%= article.id %>?_method=DELETE" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    <% } %>
                 </div>
             </div>
         <% }) %>

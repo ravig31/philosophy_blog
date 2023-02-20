@@ -18,9 +18,19 @@ router.get('/share', requiresAuth(), (req, res) => {
 })
 
 router.get('/edit/:id', async (req, res) => {
-    console.log('called edit')
-    const article = await Article.findById(req.params.id)
-    res.render('articles/edit', {article: article })
+    let sub = null;
+    let userId = null;
+    req.article = await Article.findById(req.params.id)
+
+    if (req.oidc.isAuthenticated()){
+        sub = req.oidc.user.sub.split('|')
+        userId = sub[sub.length - 1]
+        if (req.article.author[0] === userId){
+            res.render('articles/edit', {article: article })
+        }
+    }
+    res.redirect('/')
+    
 })
 
 router.get("/:slug", async (req, res) => {
@@ -30,10 +40,11 @@ router.get("/:slug", async (req, res) => {
     if (article == null) {
       res.redirect('/');
     } else {
-      if (article.hasOwnProperty('origURL') && article.origURL) {
+      if (article.origURL) {
         fromMedium = true;
       }
-      res.render('articles/show', { article, fromMedium });
+
+      res.render('articles/show', { article : article, fromMedium: fromMedium, authorId: article.author[0],authorUsername: article.author[1], authorImg: article.author[2]});
     }
   });
 
@@ -52,6 +63,14 @@ router.post('/new', async (req, res, next) => {
 
     // add article to user DB
     updateUserArticles(userId, req.article.id)
+    
+    // save author info to article
+    user =  await User.findOne({userId})
+    username = user.toObject().username
+    picture = user.toObject().picture
+
+    req.article.author = [userId, username, picture]
+
     next()
 }, saveAndRedirect('new'))
 
@@ -61,11 +80,24 @@ router.post('/share', async (req, res, next) => {
     const mediumId = mediumURLparts[mediumURLparts.length - 1];
     const articleData = await api.processArticleID(mediumId);
     
+    const sub = req.oidc.user.sub.split('|')
+    const userId = sub[sub.length - 1]
+
     let article = new Article()
     article.title = articleData.title
     article.description = articleData.description
     article.markdown = articleData.markdown
     article.origURL = articleData.url
+
+    // add article to user DB
+    updateUserArticles(userId, article.id)
+
+    // save author info to article
+    user =  await User.findOne({userId})
+    username = user.toObject().username
+    picture = user.toObject().picture
+
+    article.author = [userId, username, picture]
 
     try{
         article = await article.save()
@@ -74,30 +106,40 @@ router.post('/share', async (req, res, next) => {
         res.render(`articles/${path}`, {article: article})
     }
 
-    const sub = req.oidc.user.sub.split('|')
-    const userId = sub[sub.length - 1]
-
-    updateUserArticles(userId, article.id)
-
   });
   
 
 
 router.delete('/:id', async (req, res) => {
-    const sub = req.oidc.user.sub.split('|')
-    const userId = sub[sub.length - 1]
+    let sub = null;
+    let userId = null;
+    article = await Article.findById(req.params.id)
 
-    User.updateOne({ _id: userId }, { $pull: { articles: req.params.id} }, (err, result) => {
-        if (err) {
-          console.error('Error deleting article:', err);
-        } else {
-          console.log('Article deleted');
+    if (req.oidc.isAuthenticated()){
+        sub = req.oidc.user.sub.split('|')
+        userId = sub[sub.length - 1]
+        if (article.author[0] === userId){
+            const sub = req.oidc.user.sub.split('|')
+            const userId = sub[sub.length - 1]
+            article = await Article.findById(req.params.id)
+            
+            User.updateOne({ _id: userId }, { $pull: { articles: req.params.id} }, (err, result) => {
+                if (err) {
+                console.error('Error deleting article:', err);
+                } else {
+                console.log('Article deleted');
+                }
+            });
+    
+            await Article.findByIdAndDelete(req.params.id)
         }
-      });
+    }
 
-    await Article.findByIdAndDelete(req.params.id)
+
     res.redirect('/')
+
 })
+
 
 
 function updateUserArticles(userId, articleId){

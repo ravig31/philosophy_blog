@@ -19,7 +19,7 @@ const articleSchema = new mongoose.Schema({
     },
 
     author: {
-        type: String,
+        type: Array,
         required: true,
     },
 

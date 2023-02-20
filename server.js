@@ -4,6 +4,7 @@ const dotenv = require('dotenv').config()
 const methodOverride = require('method-override')
 
 const Article = require('./models/article')
+const User = require('./models/user')
 const articleRouter = require('./routes/articles')
 
 const { auth, requiresAuth } = require('express-openid-connect');
@@ -33,21 +34,74 @@ app.set('view engine', 'ejs')
 
 
 app.get('/', async (req, res) => {
-
-    const isLoggedIn = req.oidc.isAuthenticated()
-    isLoggedIn ? userImgUrl = req.oidc.user.picture : userImgUrl = null
+    
+    let sub;
+    let userId;
+    let userImgUrl;
 
     const articles = await Article.find().sort({
-        createdAt: 'desc'})
-    res.render('articles/index', { articles: articles, isLoggedIn: isLoggedIn, userImgUrl: userImgUrl })
+        createdAt: 'desc'
+    })
 
+    if (req.oidc.isAuthenticated()) {
+        sub = req.oidc.user.sub.split('|')
+        userId = sub[sub.length - 1]
+
+        for (const article of articles) {
+            // check if the current user has an article with the same ID as the current article
+                if (article.author[0] === userId) {
+                    article.isOwnedByCurrentUser = true
+                }
+            }
+
+        user =  await User.findOne({userId})
+        userImgUrl = user.toObject().picture
+    }
+
+    
+
+
+
+
+    res.render('articles/index', {
+        articles: articles,
+        isLoggedIn: req.oidc.isAuthenticated(),
+        userImgUrl: userImgUrl,
+        userId: userId
+    })
 })
 
 
-app.get('/auth/user', requiresAuth(), (req, res) => {
-    res.send(JSON.stringify(req.oidc.user))
-})
 
+app.get('/auth/user/:id', async (req, res) => {
+    const userRaw =  await User.findById(req.params.id)
+    const user = userRaw.toObject()
+
+    let articleObjects = [];
+    let isCurrentUser = false
+
+    if (req.oidc.isAuthenticated()){
+        sub = req.oidc.user.sub.split('|')
+        userId = sub[sub.length - 1]
+
+        if (userId === req.params.id){
+            isCurrentUser = true
+        }
+    }
+
+    for (i=0; i < user.articles.length; i++){
+        article = await Article.findById(user.articles[i])
+        articleObjects.push(article)
+    }
+
+    res.render('auth/user', {
+        username: user.username,
+        articleCount: user.articles.length,
+        articles: articleObjects,
+        picture: user.picture,
+        isCurrentUser: isCurrentUser
+    })
+})
 
 
 app.use("/articles", articleRouter)

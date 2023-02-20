@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <link href="./styles.css" rel="stylesheet" type="text/css">
     <title>Blog</title>
     <style>
         img {
@@ -24,23 +23,31 @@
             border: 2px solid;
         }
 
+        .username{
+            margin-top: 60px;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
         <div>
             <div class="d-flex">
-                <a href="../auth/user" class="d-flex align-items-center mb-4 user-img-wrapper">
-                    <img class="article-user-img dropdown-toggle" src="" alt="User Image">
+                <a href="../auth/user/<%=authorId%>" class="d-flex align-items-center user-img-wrapper">
+                    <img class="article-user-img dropdown-toggle" src="<%= authorImg %>" alt="User Image">
                 </a>
-                
+                <% if (fromMedium) {%>
+                    <p class="ps-2 username"><i>Shared by:  </i><%= authorUsername %></p>
+                <%} else { %>
+                    <p class="ps-2 username"><i>Authored by:  </i><%= authorUsername %></p>
+                <% } %>
             </div>
             <h1 class="mb-1"><%= article.title %></h1>
-            <div class="d-flex text-muted mb-2 mt-2">
+            <div class="d-flex text-muted mb-2">
                 <%= article.createdAt.toLocaleDateString() %>
                 <% if (fromMedium) { %>
                     <a href="<%= article.origURL %>" target="_blank">
-                        <h6 class="ps-3 pb-1">Click Here for original article!</h6>
+                        <h6 class="ps-3">Click Here for original article!</h6>
                     </a>
                 <% } %>
             </div>

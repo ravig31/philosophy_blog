@@ -6,7 +6,7 @@ exports.processArticleID = async function(ArticleID) {
     method: 'GET',
     url:  `https://medium2.p.rapidapi.com/article/${ArticleID}`,
     headers: {
-      'X-RapidAPI-Key': process.env.API_KEY,
+      'X-RapidAPI-Key': process.env.MEDIUM_API_KEY,
       'X-RapidAPI-Host': 'medium2.p.rapidapi.com'
     }
   };
@@ -15,7 +15,7 @@ exports.processArticleID = async function(ArticleID) {
     method: 'GET',
     url:  `https://medium2.p.rapidapi.com/article/${ArticleID}/markdown`,
     headers: {
-      'X-RapidAPI-Key': process.env.API_KEY,
+      'X-RapidAPI-Key': process.env.MEDIUM_API_KEY,
       'X-RapidAPI-Host': 'medium2.p.rapidapi.com'
     }
   };

@@ -78,7 +78,7 @@ router.post('/new', async (req, res, next) => {
     
     // save author info to article
     user =  await User.findOne({userId})
-    username = user.toObject().username
+    username = user.toObject().user
     picture = user.toObject().picture
 
     req.article.author = [userId, username, picture]

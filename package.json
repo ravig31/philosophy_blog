@@ -27,7 +27,10 @@
     "method-override": "^3.0.0",
     "mongodb": "^5.0.1",
     "mongoose": "^6.9.0",
+    "netlify": "^13.1.2",
+    "netlify-cli": "^12.14.0",
     "request": "^2.88.2",
+    "serverless-http": "^3.1.1",
     "slugify": "^1.6.5"
   }
 }

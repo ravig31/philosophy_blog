@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const router = express.Router()
 const dotenv = require('dotenv').config()
 const methodOverride = require('method-override')
 
@@ -21,7 +22,7 @@ const config = {
     authRequired: false,
     auth0Logout: true,
     secret: process.env.SECRET,
-    baseURL: 'http://localhost:3000',
+    baseURL: 'https://prokopton-circle.onrender.com',
     clientID: 'EqADCxdfNyty9yNdLwydqTbi2ku1dwpN',
     issuerBaseURL: 'https://dev-3w13u2voxkka7vrf.us.auth0.com'
   };
@@ -31,6 +32,7 @@ app.use(express.urlencoded({ extended: false}))
 app.use(methodOverride('_method'))
 app.use(express.json())
 app.set('view engine', 'ejs')
+
 app.get('/', async (req, res) => {
         
     let sub;
@@ -103,5 +105,6 @@ app.get('/auth/user/:id', async (req, res) => {
 
 
 app.use("/articles", articleRouter)
-const port = 3000;
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(() => {
+    console.log('Example app listening on http://prokopton-circle.onrender.com!');
+  });

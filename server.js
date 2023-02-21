@@ -103,4 +103,5 @@ app.get('/auth/user/:id', async (req, res) => {
 
 
 app.use("/articles", articleRouter)
-app.listen(3000)
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));

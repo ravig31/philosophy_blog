@@ -48,7 +48,7 @@ router.get("/:slug", async (req, res) => {
     }
 });
 
-router.post('/:slug', async (req, res, next) => {
+router.post('/:slug', requiresAuth(), async (req, res, next) => {
 
     Article.updateOne({ _id: req.body.articleId}, { $push: { comments: [req.oidc.user.nickname, req.body.comment, new Date(Date.now())] } }, (err, result) => {
         if (err) {

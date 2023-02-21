@@ -106,5 +106,5 @@ app.get('/auth/user/:id', async (req, res) => {
 
 app.use("/articles", articleRouter)
 app.listen(() => {
-    console.log('Example app listening on http://prokopton-circle.onrender.com!');
+    console.log('app listening on '+process.env.PORT+'!');
   });

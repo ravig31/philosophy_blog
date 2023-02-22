@@ -22,7 +22,7 @@ const config = {
     authRequired: false,
     auth0Logout: true,
     secret: process.env.SECRET,
-    baseURL: 'https://prokopton-circle.onrender.com',
+    baseURL: 'https://prokopton-circle.onrender.com/',
     clientID: 'EqADCxdfNyty9yNdLwydqTbi2ku1dwpN',
     issuerBaseURL: 'https://dev-3w13u2voxkka7vrf.us.auth0.com'
   };

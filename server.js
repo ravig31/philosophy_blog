@@ -21,6 +21,9 @@ mongoose.connect(DB_URL);
   const config = {
     authRequired: false,
     auth0Logout: true,
+    routes: {
+        login: false,
+    },
     secret: process.env.SECRET,
     baseURL: 'https://prokopton-circle.onrender.com',
     clientID: 'EqADCxdfNyty9yNdLwydqTbi2ku1dwpN',

@@ -1,3 +1,4 @@
+const { auth, requiresAuth } = require('express-openid-connect');
 const express = require('express')
 const app = express()
 const router = express.Router()
@@ -8,7 +9,6 @@ const Article = require('./models/article')
 const User = require('./models/user')
 const articleRouter = require('./routes/articles')
 
-const { auth, requiresAuth } = require('express-openid-connect');
 
 const mongoose = require('mongoose')
 const DB_URL = "mongodb+srv://ravig31:"+process.env.MONGODB_PASSWORD+"@personal-project-cluste.tscxyk2.mongodb.net/blogposts"
@@ -19,10 +19,12 @@ mongoose.connect(DB_URL);
 
 
   const config = {
+    idpLogout: true,
     authRequired: false,
     auth0Logout: true,
     routes: {
         login: false,
+        callback: false,
     },
     secret: process.env.SECRET,
     baseURL: 'https://prokopton-circle.onrender.com',

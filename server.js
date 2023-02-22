@@ -1,5 +1,7 @@
 const { auth, requiresAuth } = require('express-openid-connect');
 const express = require('express')
+const http = require('http')
+const https = require('https')
 const app = express()
 const router = express.Router()
 const dotenv = require('dotenv').config()
@@ -19,18 +21,10 @@ mongoose.connect(DB_URL);
 
 
   const config = {
-    idpLogout: true,
     authRequired: false,
     auth0Logout: true,
-    redirectUri: 'https://prokopton-circle.onrender.com/callback',
-    routes: {
-        callback: '/auth/callback',
-        logout: '/auth/logout',
-        login: '/auth/login',
-        postLogoutRedirect: '/',
-    },
     secret: process.env.SECRET,
-    baseURL: 'https://prokopton-circle.onrender.com',
+    baseURL: 'http://localhost:3000/',
     clientID: 'EqADCxdfNyty9yNdLwydqTbi2ku1dwpN',
     issuerBaseURL: 'https://dev-3w13u2voxkka7vrf.us.auth0.com'
   };
@@ -80,6 +74,7 @@ app.get('/', async (req, res) => {
 })
 
 
+
 app.get('/auth/user/:id', async (req, res) => {
     const userRaw =  await User.findById(req.params.id)
     const user = userRaw.toObject()
@@ -112,6 +107,6 @@ app.get('/auth/user/:id', async (req, res) => {
 
 
 app.use("/articles", articleRouter)
-app.listen(() => {
+app.listen(3000, () => {
     console.log('app listening on '+process.env.PORT+'!');
   });

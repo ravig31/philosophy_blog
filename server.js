@@ -84,6 +84,12 @@ app.get('/login', (req, res) =>
   })
 );
 
+app.get('/callback', (req, res) =>
+  res.oidc.callback({
+    redirectUri: 'https://prokopton-circle.onrender.com/callback',
+  })
+);
+
 
 app.get('/auth/user/:id', async (req, res) => {
     const userRaw =  await User.findById(req.params.id)

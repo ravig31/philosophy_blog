@@ -1,7 +1,5 @@
 const { auth, requiresAuth } = require('express-openid-connect');
 const express = require('express')
-const http = require('http')
-const https = require('https')
 const app = express()
 const router = express.Router()
 const dotenv = require('dotenv').config()
@@ -24,7 +22,7 @@ mongoose.connect(DB_URL);
     authRequired: false,
     auth0Logout: true,
     secret: process.env.SECRET,
-    baseURL: 'http://localhost:3000/',
+    baseURL: 'https://prokopton-circle.onrender.com',
     clientID: 'EqADCxdfNyty9yNdLwydqTbi2ku1dwpN',
     issuerBaseURL: 'https://dev-3w13u2voxkka7vrf.us.auth0.com'
   };
@@ -107,6 +105,6 @@ app.get('/auth/user/:id', async (req, res) => {
 
 
 app.use("/articles", articleRouter)
-app.listen(3000, () => {
+app.listen(() => {
     console.log('app listening on '+process.env.PORT+'!');
   });

@@ -22,9 +22,12 @@ mongoose.connect(DB_URL);
     idpLogout: true,
     authRequired: false,
     auth0Logout: true,
+    redirectUri: 'https://prokopton-circle.onrender.com/callback',
     routes: {
-        login: false,
-        callback: false,
+        callback: '/auth/callback',
+        logout: '/auth/logout',
+        login: '/auth/login',
+        postLogoutRedirect: '/',
     },
     secret: process.env.SECRET,
     baseURL: 'https://prokopton-circle.onrender.com',
@@ -75,22 +78,6 @@ app.get('/', async (req, res) => {
         userId: userId
     })
 })
-
-
-app.get('/login', (req, res) =>
-  res.oidc.login({
-    returnTo: '/',
-    authorizationParams: {
-      redirect_uri: 'https://prokopton-circle.onrender.com/callback',
-    },
-  })
-);
-
-app.get('/callback', (req, res) =>
-  res.oidc.callback({
-    redirectUri: 'https://prokopton-circle.onrender.com/callback',
-  })
-);
 
 
 app.get('/auth/user/:id', async (req, res) => {

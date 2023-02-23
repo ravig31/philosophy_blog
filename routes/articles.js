@@ -182,5 +182,4 @@ function saveAndRedirect(path, userId = null) {
 }
 
 
-console.log("SERVER IS RUNNING")
 module.exports = router

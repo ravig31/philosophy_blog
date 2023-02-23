@@ -1,6 +1,7 @@
 const { auth, requiresAuth } = require('express-openid-connect');
 const express = require('express')
 const app = express()
+const http = require('http');
 const router = express.Router()
 const dotenv = require('dotenv').config()
 const methodOverride = require('method-override')
@@ -103,8 +104,11 @@ app.get('/auth/user/:id', async (req, res) => {
     })
 })
 
-
 app.use("/articles", articleRouter)
-app.listen(() => {
-    console.log('app listening on '+process.env.PORT+'!');
-  });
+
+const server = http.createServer(app);
+const port = process.env.PORT || 3000;
+
+server.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});

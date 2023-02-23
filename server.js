@@ -1,7 +1,8 @@
 const { auth, requiresAuth } = require('express-openid-connect');
 const express = require('express')
 const app = express()
-const http = require('http');
+const https = require('https');
+const fs = require('fs')
 const router = express.Router()
 const dotenv = require('dotenv').config()
 const methodOverride = require('method-override')
@@ -106,9 +107,14 @@ app.get('/auth/user/:id', async (req, res) => {
 
 app.use("/articles", articleRouter)
 
-const server = http.createServer(app);
-const port = process.env.PORT;
 
-server.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+const options = {
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.crt')
+  };
+
+https.createServer(options, app)
+    .listen(443, () => {
+    console.log('Server listening on port 443');
 });
+

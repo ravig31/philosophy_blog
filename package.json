@@ -20,6 +20,7 @@
     "ejs": "^3.1.8",
     "express": "^4.18.2",
     "express-openid-connect": "^2.12.0",
+    "fs": "^0.0.1-security",
     "hbs": "^4.2.0",
     "jsdom": "^21.1.0",
     "jsonwebtoken": "^9.0.0",
@@ -27,6 +28,7 @@
     "method-override": "^3.0.0",
     "mongodb": "^5.0.1",
     "mongoose": "^6.9.0",
+    "openssl": "^2.0.0",
     "request": "^2.88.2",
     "serverless-http": "^3.1.1",
     "slugify": "^1.6.5"

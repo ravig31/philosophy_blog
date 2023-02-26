@@ -1,7 +1,7 @@
 const { auth, requiresAuth } = require('express-openid-connect');
 const express = require('express')
 const app = express()
-const https = require('https');
+const http = require('http');
 const fs = require('fs')
 const router = express.Router()
 const dotenv = require('dotenv').config()
@@ -24,7 +24,7 @@ mongoose.connect(DB_URL);
     authRequired: false,
     auth0Logout: true,
     secret: process.env.SECRET,
-    baseURL: 'https://prokopton-circle.onrender.com',
+    baseURL: 'http://localhost:3000/',
     clientID: 'EqADCxdfNyty9yNdLwydqTbi2ku1dwpN',
     issuerBaseURL: 'https://dev-3w13u2voxkka7vrf.us.auth0.com'
   };
@@ -59,11 +59,6 @@ app.get('/', async (req, res) => {
         user =  await User.findOne({userId})
         userImgUrl = user.toObject().picture
     }
-
-    
-
-
-
 
     res.render('articles/index', {
         articles: articles,
@@ -108,13 +103,8 @@ app.get('/auth/user/:id', async (req, res) => {
 app.use("/articles", articleRouter)
 
 
-const options = {
-    key: fs.readFileSync('server.key'),
-    cert: fs.readFileSync('server.crt')
-  };
 
-https.createServer(options, app)
-    .listen(443, () => {
-    console.log('Server listening on port 443');
+http.createServer(app)
+    .listen(() => {
+    console.log('Server Running on port: '+process.env.PORT);
 });
-

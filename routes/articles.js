@@ -48,18 +48,6 @@ router.get("/:slug", async (req, res) => {
     }
 });
 
-router.post('/:slug', requiresAuth(), async (req, res, next) => {
-
-    Article.updateOne({ _id: req.body.articleId}, { $push: { comments: [req.oidc.user.nickname, req.body.comment, new Date(Date.now())] } }, (err, result) => {
-        if (err) {
-            console.error('Error adding comment:', err);
-        } else {
-            console.log('Comment Added');
-        }
-        });
-
-    res.redirect(req.get('referer'))
-})
 
 router.put('/:id', async (req, res, next) => {
     req.article = await Article.findById(req.params.id)
@@ -121,6 +109,19 @@ router.post('/share', async (req, res, next) => {
   });
 
   
+router.post('/:slug', requiresAuth(), async (req, res, next) => {
+
+    console.log(req.params)
+    Article.updateOne({ _id: req.body.articleId}, { $push: { comments: [req.oidc.user.nickname, req.body.comment, new Date(Date.now())] } }, (err, result) => {
+        if (err) {
+            console.error('Error adding comment:', err);
+        } else {
+            console.log('Comment Added');
+        }
+        });
+
+    res.redirect(req.get('referer'))
+})
 
 
 router.delete('/:id', async (req, res) => {

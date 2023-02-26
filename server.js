@@ -105,6 +105,6 @@ app.use("/articles", articleRouter)
 
 
 http.createServer(app)
-    .listen(() => {
+    .listen(3000, () => {
     console.log('Server Running on port: '+process.env.PORT);
 });

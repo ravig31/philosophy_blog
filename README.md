@@ -4,6 +4,8 @@ The site is titled The Prokopton Circle, a greek word meaning "one who is making
 
 It is a full-stack web application built using JavaScript, HTML/CSS, Node.js, ExpressJS, EJS, Bootstrap, and MongoDB. The goal of the project is to bring together a community of individuals with a shared passion for philosophy and provide a platform for them to share their thoughts and ideas.
 
+![alt text](https://github.com/ravig31/philosophy_blog/blob/master/readme-assets/ex.png?raw=true)
+
 ## Features
 
 - Fast and efficient site with responsive and intuitive user interface.

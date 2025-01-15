@@ -28,6 +28,3 @@ To set up the project on your local machine, follow these steps:
 
 To use the website visit https://prokopton-circle.onrender.com where you can use it to share your thoughts and ideas on philosophy with like-minded individuals. You can create an account, log in, and start sharing articles, commenting, and participating in discussions. The site is designed to be easy to use and to foster a sense of community among its users.
 
-## Credits
-
-The Philosophy Blog Project was developed by Ravindu Gamage. If you have any questions or comments about the project, please feel free to get in touch with me. I hope you enjoy using the site!
